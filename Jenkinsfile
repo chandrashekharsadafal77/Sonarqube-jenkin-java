@@ -11,9 +11,9 @@ pipeline {
 
         stage('Build') {
             steps {
-                // Clean and build the Maven project
+                // Clean and build the Maven project using Windows batch commands
                 script {
-                    sh 'mvn clean install'
+                    bat 'mvn clean install'
                 }
             }
         }
@@ -23,7 +23,7 @@ pipeline {
                 // Perform SonarQube analysis
                 script {
                     withSonarQubeEnv('Sonarqube') {
-                        sh 'mvn sonar:sonar'
+                        bat 'mvn sonar:sonar'
                     }
                 }
             }
