@@ -12,15 +12,19 @@ pipeline {
         stage('Build') {
             steps {
                 // Clean and build the Maven project
-                sh 'mvn clean install'
+                script {
+                    sh 'mvn clean install'
+                }
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
                 // Perform SonarQube analysis
-                withSonarQubeEnv('Sonarqube') {
-                    sh 'mvn sonar:sonar'
+                script {
+                    withSonarQubeEnv('Sonarqube') {
+                        sh 'mvn sonar:sonar'
+                    }
                 }
             }
         }
@@ -28,7 +32,11 @@ pipeline {
         stage('Quality Gate') {
             steps {
                 // Wait for SonarQube analysis to complete and check quality gate status
-                waitForQualityGate()
+                script {
+                    timeout(time: 1, unit: 'HOURS') {
+                        waitForQualityGate()
+                    }
+                }
             }
         }
     }
