@@ -16,11 +16,11 @@
 
     <properties>
         <java.version>17</java.version>
-    <sonar.projectKey>Java-project</sonar.projectKey>
-    <sonar.projectName>Java-project</sonar.projectName>
-    <sonar.host.url>http://localhost:9000</sonar.host.url>
-    <sonar.login>sqp_8c0f989a068942f36a798e05ea3c63a710b07e3e</sonar.login>
-</properties>
+        <sonar.projectKey>Java-project</sonar.projectKey>
+        <sonar.projectName>Java-project</sonar.projectName>
+        <sonar.host.url>http://localhost:9000</sonar.host.url>
+        <sonar.login>sqp_8c0f989a068942f36a798e05ea3c63a710b07e3e</sonar.login>
+    </properties>
 
     <dependencies>
         <!-- Spring Boot dependencies -->
@@ -53,13 +53,13 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
         <!-- Springdoc OpenAPI -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>2.6.0</version>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -73,7 +73,7 @@
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.9.0.2155</version> <!-- Use the latest version -->
+                <version>3.9.0.2155</version>
             </plugin>
         </plugins>
     </build>
