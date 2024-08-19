@@ -50,7 +50,11 @@ pipeline {
             cleanWs()
         }
         success {
-            echo 'Build and analysis completed successfully.'
+            script {
+                def sonarqubeUrl = "http://localhost:9000/dashboard?id=java-project"
+                echo "Build and analysis completed successfully."
+                echo "Visit the SonarQube dashboard for your project: ${sonarqubeUrl}"
+            }
         }
         failure {
             echo 'Build or analysis failed.'
