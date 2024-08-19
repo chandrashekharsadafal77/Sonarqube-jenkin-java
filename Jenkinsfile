@@ -43,11 +43,14 @@ pipeline {
                 def projectUrl = "${sonarQubeUrl}/projects/overview?id=${projectKey}"
                 echo "SonarQube Project URL: ${projectUrl}"
 
-                // Email notification (requires Email Extension Plugin)
+                // Email notification
                 emailext (
                     subject: "Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                    body: "The build was successful. You can view the SonarQube report at ${projectUrl}",
-                    to: 'mailto:recipient@example.com' // Replace with actual recipient
+                    body: """
+                        The build was successful. You can view the SonarQube report at the following link:
+                        ${projectUrl}
+                    """,
+                    to: 'chandrashekharsadafal777@gmail.com'
                 )
             }
         }
