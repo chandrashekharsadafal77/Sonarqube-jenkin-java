@@ -1,27 +1,59 @@
 pipeline {
     agent any
-    
+
     stages {
-        stage('Fetch Code') {
+        stage('Build') {
             steps {
-                git 'git@gitlab.com:baap2610337/java-project.git'
+                script {
+                    bat 'mvn clean install'
+                }
             }
         }
-        stage('Code Analysis') {
+
+        stage('SonarQube Analysis') {
             environment {
-                scannerHome = tool 'Sonar'  // Make sure 'Sonar' is configured in Jenkins' global tools
+                SONARQUBE = 'Sonarqube' // Name of the SonarQube server configuration in Jenkins
             }
             steps {
                 script {
-                    withSonarQubeEnv('Sonar') {  // 'Sonar' is the name of your SonarQube server configuration in Jenkins
-                        sh "${scannerHome}/bin/sonar-scanner \
-                            -Dsonar.projectKey=Java-project \
-                            -Dsonar.projectName=Java-project \
-                            -Dsonar.projectVersion=1.0 \
-                            -Dsonar.sources=src/main/java" // Adjust the project path if needed
+                    withSonarQubeEnv(SONARQUBE) {
+                        bat 'mvn sonar:sonar'
                     }
                 }
             }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                script {
+                    def qg = waitForQualityGate()
+                    if (qg.status != 'OK') {
+                        error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            script {
+                def sonarQubeUrl = 'http://localhost:9000' // Replace with your SonarQube server URL
+                def projectKey = 'java-project' // Replace with your SonarQube project key
+                def projectUrl = "${sonarQubeUrl}/projects/overview?id=${projectKey}"
+                echo "SonarQube Project URL: ${projectUrl}"
+
+                // Email notification (requires Email Extension Plugin)
+                emailext (
+                    subject: "Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                    body: "The build was successful. You can view the SonarQube report at ${projectUrl}",
+                    to: 'mailto:recipient@example.com' // Replace with actual recipient
+                )
+            }
+        }
+
+        always {
+            cleanWs()
         }
     }
 }
