@@ -12,12 +12,12 @@ pipeline {
 
         stage('SonarQube Analysis') {
             environment {
-                SONARQUBE = 'Sonarqube' // Name of the SonarQube server configuration in Jenkins
+                SONARQUBE = 'SonarQube' // Ensure this name matches the configuration in Jenkins
             }
             steps {
                 script {
                     withSonarQubeEnv(SONARQUBE) {
-                        bat 'mvn sonar:sonar'
+                        bat 'mvn sonar:sonar -Dsonar.projectKey=java-project -Dsonar.projectName=Java-project -Dsonar.projectVersion=1.0 -Dsonar.sources=src/main/java'
                     }
                 }
             }
@@ -36,22 +36,6 @@ pipeline {
     }
 
     post {
-        success {
-            script {
-                def sonarQubeUrl = 'http://localhost:9000' // Replace with your SonarQube server URL
-                def projectKey = 'java-project' // Replace with your SonarQube project key
-                def projectUrl = "${sonarQubeUrl}/projects/overview?id=${projectKey}"
-                echo "SonarQube Project URL: ${projectUrl}"
-
-                // Email notification (requires Email Extension Plugin)
-                emailext (
-                    subject: "Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                    body: "The build was successful. You can view the SonarQube report at ${projectUrl}",
-                    to: 'mailto:recipient@example.com' // Replace with actual recipient
-                )
-            }
-        }
-
         always {
             cleanWs()
         }
