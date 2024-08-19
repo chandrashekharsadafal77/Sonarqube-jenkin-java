@@ -1,28 +1,31 @@
 pipeline {
     agent any
 
+    environment {
+        SONARQUBE_URL = 'http://localhost:9000/dashboard?id=java-project' // Replace with your SonarQube server and project key
+    }
+
     stages {
+        stage('Checkout SCM') {
+            steps {
+                checkout scm
+            }
+        }
         stage('Build') {
             steps {
-                script {
-                    bat 'mvn clean install'
-                }
+                bat 'mvn clean install'
             }
         }
-
         stage('SonarQube Analysis') {
             environment {
-                SONARQUBE = 'Sonarqube' // Name of the SonarQube server configuration in Jenkins
+                scannerHome = tool 'SonarQubeScanner' // Use your SonarQube scanner tool name
             }
             steps {
-                script {
-                    withSonarQubeEnv(SONARQUBE) {
-                        bat 'mvn sonar:sonar'
-                    }
+                withSonarQubeEnv('Sonarqube') { // Use the correct SonarQube installation name
+                    bat "${scannerHome}/bin/sonar-scanner"
                 }
             }
         }
-
         stage('Quality Gate') {
             steps {
                 script {
@@ -37,24 +40,12 @@ pipeline {
 
     post {
         success {
-            script {
-                def sonarQubeUrl = 'http://localhost:9000' // Replace with your SonarQube server URL
-                def projectKey = 'java-project' // Replace with your SonarQube project key
-                def projectUrl = "${sonarQubeUrl}/projects/overview?id=${projectKey}"
-                echo "SonarQube Project URL: ${projectUrl}"
-
-                // Email notification
-                emailext (
-                    subject: "Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                    body: """
-                        The build was successful. You can view the SonarQube report at the following link:
-                        ${projectUrl}
-                    """,
-                    to: 'chandrashekharsadafal777@gmail.com'
-                )
-            }
+            echo "Build successful!"
+            echo "View SonarQube results at: ${SONARQUBE_URL}"
         }
-
+        failure {
+            echo "Build failed!"
+        }
         always {
             cleanWs()
         }
