@@ -12,7 +12,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             environment {
-                SONARQUBE = 'Sonarqube' // Name of the SonarQube server configuration in Jenkins
+                SONARQUBE = 'Sonarqube' // Ensure this matches the name in Jenkins configuration
             }
             steps {
                 script {
