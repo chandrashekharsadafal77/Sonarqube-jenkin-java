@@ -1,18 +1,12 @@
-# Swagger-project-java
+# SonarQube With Jenkins (Java)
 
-## Output:
-## Swagger Video with Project Java Spring Boot
+# Out put :-
+# Step 1 :
+![1](https://github.com/user-attachments/assets/31305f79-98d0-4cc4-9a60-21cdea100db5)
+# Step 2 :
+![2](https://github.com/user-attachments/assets/e9975b1b-f732-419f-ab6e-a011e4f652a6)
+# Step 3
+![4](https://github.com/user-attachments/assets/539f77dd-336c-4221-ab96-840c8504ab45)
 
-[Watch the video]([https://www.loom.com/share/080178deef4e445ea040075cbe3f4f80?sid=8a3a9114-856a-4a55-8ef4-6c3294afbbda](https://drive.google.com/file/d/1QffuQ7milXd3zNBL-TOY9rm2F6ECfiM-/view?usp=drive_link))
-
-### Step 1:
-![swagger1](https://github.com/user-attachments/assets/63251176-e795-41f1-a6c4-1b1a55fd7f27)
-
-### Step 2:
-![swagger](https://github.com/user-attachments/assets/5320372b-b8c4-4be2-b547-103e7e9496d1)
-
-### Step 3:
-![swagger2](https://github.com/user-attachments/assets/c3d04691-6349-4301-974a-fee3fba1279e)
-
-"# Sonarqube-jenkin-java" 
-"# Sonarqube-jenkin-java" 
+#Step 4 
+![3](https://github.com/user-attachments/assets/f09aaeef-800b-4c7c-bbf4-9fdf285a92b0)
