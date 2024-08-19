@@ -2,52 +2,52 @@ pipeline {
     agent any
 
     environment {
-        SONARQUBE_URL = 'http://localhost:9000/dashboard?id=java-project' // Replace with your SonarQube server and project key
+        MAVEN_HOME = tool 'Maven 3.8.6' // Adjust to the exact name in Jenkins
+        PATH = "${MAVEN_HOME}/bin:${env.PATH}"
+        SONAR_SCANNER_HOME = tool 'Sonar' // Adjust to the exact name in Jenkins
     }
 
     stages {
-        stage('Checkout SCM') {
+        stage('Checkout') {
             steps {
-                checkout scm
+                // Checkout your code from the Git repository
+                git 'git@gitlab.com:baap2610337/java-project.git' // Adjust the repo URL as needed
             }
         }
+
         stage('Build') {
             steps {
-                bat 'mvn clean install'
+                // Build the Maven project
+                sh 'mvn clean package'
             }
         }
+
         stage('SonarQube Analysis') {
-            environment {
-                scannerHome = tool 'SonarQubeScanner' // Use your SonarQube scanner tool name
-            }
             steps {
-                withSonarQubeEnv('Sonarqube') { // Use the correct SonarQube installation name
-                    bat "${scannerHome}/bin/sonar-scanner"
+                withSonarQubeEnv('SonarQube') { // Adjust 'SonarQube' to your SonarQube server configuration name
+                    // Run the SonarQube analysis
+                    sh "mvn sonar:sonar -Dsonar.projectKey=java-project"
                 }
             }
         }
+
         stage('Quality Gate') {
             steps {
-                script {
-                    def qg = waitForQualityGate()
-                    if (qg.status != 'OK') {
-                        error "Pipeline aborted due to quality gate failure: ${qg.status}"
-                    }
+                // Wait for the SonarQube Quality Gate result
+                timeout(time: 1, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
     }
 
     post {
-        success {
-            echo "Build successful!"
-            echo "View SonarQube results at: ${SONARQUBE_URL}"
-        }
-        failure {
-            echo "Build failed!"
-        }
         always {
-            cleanWs()
+            // Display the SonarQube dashboard link in the console output
+            script {
+                def sonarUrl = "http://localhost:9000/dashboard?id=java-project"
+                echo "SonarQube analysis completed. Check the results at: ${sonarUrl}"
+            }
         }
     }
 }
