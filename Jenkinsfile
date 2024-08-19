@@ -5,7 +5,7 @@ pipeline {
         // Define environment variables for SonarQube
         SONARQUBE_SERVER = 'SonarQube' // Name of SonarQube installation configured in Jenkins
         SONARQUBE_URL = 'http://localhost:9000' // URL of your SonarQube server
-        SONARQUBE_PROJECT_KEY = 'java-project' // Project key in SonarQube
+        SONARQUBE_PROJECT_KEY = 'Java-project' // Project key in SonarQube (make sure this matches exactly)
     }
 
     stages {
